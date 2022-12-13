@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.6.7"
+version = "1.6.7-OM.2"
 description = "IridiumCore"
 
 allprojects {
@@ -14,7 +14,9 @@ allprojects {
     java.sourceCompatibility = JavaVersion.VERSION_1_8
 
     repositories {
+        mavenLocal()
         mavenCentral()
+        maven("https://moyskleytech.com/debian/m2")
         maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://repo.rosewooddev.io/repository/public/")
         maven("https://papermc.io/repo/repository/maven-public/")
@@ -25,8 +27,8 @@ allprojects {
     dependencies {
         // Dependencies that we want to shade in
         implementation("org.jetbrains:annotations:23.0.0")
-        implementation("com.github.cryptomorin:XSeries:8.8.0")
-
+        implementation("com.moyskleytech:ObsidianMaterialAPI:1.0.3-SNAPSHOT")
+        implementation("com.github.cryptomorin:XSeries:9.1.0")
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.projectlombok:lombok:1.18.22")
 
@@ -52,8 +54,9 @@ tasks {
         relocate("com.iridium.iridiumcolorapi", "com.iridium.iridiumcore.dependencies.iridiumcolorapi")
         relocate("org.yaml.snakeyaml", "com.iridium.iridiumcore.dependencies.snakeyaml")
         relocate("io.papermc.lib", "com.iridium.iridiumcore.dependencies.paperlib")
-        relocate("com.cryptomorin.xseries", "com.iridium.iridiumcore.dependencies.xseries")
         relocate("com.fasterxml.jackson", "com.iridium.iridiumcore.dependencies.fasterxml")
+        relocate("com.cryptomorin.xseries", "com.moyskleytech.obsidian.material.dependencies.xseries")
+
     }
 
     compileJava {

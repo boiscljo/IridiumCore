@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore.utils;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.moyskleytech.obsidian.material.ObsidianMaterial
+;
 import com.iridium.iridiumcore.Background;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +20,7 @@ public class InventoryUtils {
      * @param material  The material which should be counted
      * @return The amount of the material in the inventory
      */
-    public static int getAmount(Inventory inventory, XMaterial material) {
+    public static int getAmount(Inventory inventory, ObsidianMaterial material) {
         int total = 0;
         for (ItemStack item : inventory.getContents()) {
             if (item == null) continue;
@@ -38,7 +39,7 @@ public class InventoryUtils {
      * @param material  The material which should be removed
      * @param amount    The amount of items of the specified material which should be removed
      */
-    public static void removeAmount(Inventory inventory, XMaterial material, int amount) {
+    public static void removeAmount(Inventory inventory, ObsidianMaterial material, int amount) {
         int removed = 0;
         int index = 0;
 

@@ -1,6 +1,6 @@
 package com.iridium.iridiumcore.multiversion;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.moyskleytech.obsidian.material.ObsidianMaterial;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
@@ -30,7 +30,7 @@ public abstract class MultiVersion {
      * @param z     The relative z position of the block in the chunk
      * @return The material at the provided position in the chunk
      */
-    public abstract XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z);
+    public abstract ObsidianMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z);
 
     /**
      * Returns if a player can pass through a block

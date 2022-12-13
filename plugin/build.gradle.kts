@@ -1,6 +1,6 @@
 dependencies {
     // Dependencies that we want to shade in
-    implementation("de.tr7zw:item-nbt-api:2.10.0")
+    implementation("de.tr7zw:item-nbt-api:2.11.0-SNAPSHOT")
     implementation("com.iridium:IridiumColorAPI:1.0.6")
     implementation("org.jetbrains:annotations:22.0.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
@@ -10,7 +10,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
     implementation("org.yaml:snakeyaml:1.29")
     implementation("io.papermc:paperlib:1.0.7")
-
+    
     // Other dependencies that are not required or already available at runtime
     compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
 

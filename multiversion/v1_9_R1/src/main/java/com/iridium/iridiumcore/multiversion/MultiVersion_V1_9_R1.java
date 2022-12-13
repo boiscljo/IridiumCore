@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore.multiversion;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.moyskleytech.obsidian.material.ObsidianMaterial
+;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,8 +28,8 @@ public class MultiVersion_V1_9_R1 extends MultiVersion {
      */
     @Override
     @SuppressWarnings("deprecation")
-    public XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z) {
-        return XMaterial.matchXMaterial(Material.getMaterial(chunk.getBlockTypeId(x, y, z)));
+    public ObsidianMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z) {
+        return ObsidianMaterial.valueOf(Material.getMaterial(chunk.getBlockTypeId(x, y, z)));
     }
 
     @Override

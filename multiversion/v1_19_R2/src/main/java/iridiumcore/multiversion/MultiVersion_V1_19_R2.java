@@ -1,21 +1,23 @@
-package com.iridium.iridiumcore.multiversion;
+package iridiumcore.multiversion;
 
 import com.moyskleytech.obsidian.material.ObsidianMaterial
 ;
+import com.iridium.iridiumcore.multiversion.MultiVersion;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_17_R1.legacy.CraftLegacy;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.concurrent.CompletableFuture;
 
-public class MultiVersion_V1_17_R1 extends MultiVersion {
+/**
+ * Interface for working with methods that were changed during an update by Spigot.
+ */
+public class MultiVersion_V1_19_R2 extends MultiVersion {
 
-    @SuppressWarnings("deprecation")
-    public MultiVersion_V1_17_R1(JavaPlugin javaPlugin) {
+    public MultiVersion_V1_19_R2(JavaPlugin javaPlugin) {
         super(javaPlugin);
     }
 
@@ -41,11 +43,6 @@ public class MultiVersion_V1_17_R1 extends MultiVersion {
     @Override
     public CompletableFuture<Chunk> getChunkAt(World world, int x, int z) {
         return PaperLib.getChunkAtAsync(world, x, z, true);
-    }
-
-    @Override
-    public void loadLegacy() {
-        CraftLegacy.init();
     }
 
 }

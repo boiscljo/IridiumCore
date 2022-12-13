@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore.utils;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.moyskleytech.obsidian.material.ObsidianMaterial
+;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
@@ -11,6 +12,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
@@ -20,14 +22,45 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class which creates {@link ItemStack}'s.
  */
 public class ItemStackUtils {
 
-    private static final boolean supports = XMaterial.supports(16);
+    private static final boolean supports = Data.supports(16);
 
+    private static final class Data {
+        /**
+         * The current version of the server in the form of a major version.
+         * If the static initialization for this fails, you know something's wrong with the server software.
+         *
+         * @since 1.0.0
+         */
+        private static final int VERSION;
+
+        static { // This needs to be right below VERSION because of initialization order.
+            String version = Bukkit.getVersion();
+            Matcher matcher = Pattern.compile("MC: \\d\\.(\\d+)").matcher(version);
+
+            if (matcher.find()) VERSION = Integer.parseInt(matcher.group(1));
+            else throw new IllegalArgumentException("Failed to parse server version from: " + version);
+        }
+
+        /**
+         * Cached result if the server version is after the v1.13 flattening update.
+         *
+         * @since 3.0.0
+         */
+        private static final boolean ISFLAT = supports(13);
+
+        public static boolean supports(int version)
+        {
+            return Data.VERSION >= version;
+        }
+    }
     /**
      * Creates a new ItemStack from the provided arguments.
      *
@@ -37,8 +70,8 @@ public class ItemStackUtils {
      * @param lore     The lore of this item
      * @return The new ItemStack
      */
-    public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore) {
-        ItemStack itemStack = material.parseItem();
+    public static ItemStack makeItem(ObsidianMaterial material, int amount, String name, List<String> lore) {
+        ItemStack itemStack = material.toItem();
         if (itemStack == null) return null;
         itemStack.setAmount(amount);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -60,9 +93,9 @@ public class ItemStackUtils {
      */
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
-        if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
+        if (item.material instanceof com.moyskleytech.obsidian.material.implementations.HeadMaterial && item.headData != null) {
             itemStack = setHeadData(item.headData, itemStack);
-        } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
+        } else if (item.material instanceof com.moyskleytech.obsidian.material.implementations.HeadMaterial && item.headOwner != null) {
             UUID uuid;
             if (item.headOwnerUUID == null) {
                 uuid = SkinUtils.getUUID(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
@@ -118,7 +151,7 @@ public class ItemStackUtils {
             BukkitObjectInputStream bukkitObjectInputStream = new BukkitObjectInputStream(byteArrayInputStream);
             return (ItemStack) bukkitObjectInputStream.readObject();
         } catch (Exception exception) {
-            return XMaterial.AIR.parseItem();
+            return ObsidianMaterial.valueOf("AIR").toItem();
         }
     }
 
@@ -132,6 +165,7 @@ public class ItemStackUtils {
     private static ItemStack setHeadData(String headData, ItemStack itemStack) {
         if (IridiumCore.getInstance().isTesting()) return itemStack;
         if (headData == null) return itemStack;
+
 
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompound skull = nbtItem.addCompound("SkullOwner");

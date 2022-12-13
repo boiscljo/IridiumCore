@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.moyskleytech.obsidian.material.ObsidianMaterial
+;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Item {
 
-    public XMaterial material;
+    public ObsidianMaterial material;
     public int amount;
     public String displayName;
     public String headData;
@@ -31,7 +32,7 @@ public class Item {
      * @param displayName The display name of the item with color codes
      * @param lore        The lore of the item, can be empty
      */
-    public Item(XMaterial material, int amount, String displayName, List<String> lore) {
+    public Item(ObsidianMaterial material, int amount, String displayName, List<String> lore) {
         this.material = material;
         this.amount = amount;
         this.lore = lore;
@@ -47,7 +48,7 @@ public class Item {
      * @param displayName The display name of the item with color codes
      * @param lore        The lore of the item, can be empty
      */
-    public Item(XMaterial material, int slot, int amount, String displayName, List<String> lore) {
+    public Item(ObsidianMaterial material, int slot, int amount, String displayName, List<String> lore) {
         this.material = material;
         this.amount = amount;
         this.lore = lore;
@@ -66,7 +67,7 @@ public class Item {
      * @param displayName The display name of the item with color codes
      * @param lore        The lore of the item, can be empty
      */
-    public Item(XMaterial material, int slot, String headData, int amount, String displayName, List<String> lore) {
+    public Item(ObsidianMaterial material, int slot, String headData, int amount, String displayName, List<String> lore) {
         this.material = material;
         this.amount = amount;
         this.lore = lore;
@@ -86,7 +87,7 @@ public class Item {
      * @param headOwner   The owner of the head
      * @param lore        The lore of the item, can be empty
      */
-    public Item(XMaterial material, int slot, int amount, String displayName, String headOwner, List<String> lore) {
+    public Item(ObsidianMaterial material, int slot, int amount, String displayName, String headOwner, List<String> lore) {
         this.material = material;
         this.amount = amount;
         this.lore = lore;
@@ -105,7 +106,7 @@ public class Item {
      * @param headOwner   The owner of the head
      * @param lore        The lore of the item, can be empty
      */
-    public Item(XMaterial material, int amount, String displayName, String headOwner, List<String> lore) {
+    public Item(ObsidianMaterial material, int amount, String displayName, String headOwner, List<String> lore) {
         this.material = material;
         this.amount = amount;
         this.lore = lore;
@@ -124,7 +125,7 @@ public class Item {
      * @param ownerUUID   The UUID owner of the head
      * @param lore        The lore of the item, can be empty
      */
-    public Item(XMaterial material, int amount, String displayName, String headOwner, UUID ownerUUID, List<String> lore) {
+    public Item(ObsidianMaterial material, int amount, String displayName, String headOwner, UUID ownerUUID, List<String> lore) {
         this.material = material;
         this.amount = amount;
         this.lore = lore;

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.moyskleytech.obsidian.material.ObsidianMaterialKeyDeserializer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,6 +33,12 @@ public class Persist {
         this.javaPlugin = javaPlugin;
 
         objectMapper = new ObjectMapper(persistType.getFactory()).configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
+        try{
+        ObsidianMaterialKeyDeserializer.registerKeyDeserializer(objectMapper);
+        }catch(Throwable t)
+        {
+            t.printStackTrace();
+        }
     }
 
     /**
