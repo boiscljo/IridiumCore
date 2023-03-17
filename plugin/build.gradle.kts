@@ -1,6 +1,6 @@
 dependencies {
     // Dependencies that we want to shade in
-    implementation("de.tr7zw:item-nbt-api:2.11.0-SNAPSHOT")
+    implementation("de.tr7zw:item-nbt-api:2.11.1")
     implementation("com.iridium:IridiumColorAPI:1.0.6")
     implementation("org.jetbrains:annotations:22.0.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")

@@ -1,7 +1,7 @@
 package com.iridium.iridiumcore.utils;
 
-import com.moyskleytech.obsidian.material.ObsidianMaterial
-;
+import com.moyskleytech.obsidian.material.ObsidianMaterial;
+import com.moyskleytech.obsidian.material.implementations.HeadMaterial;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
@@ -35,7 +35,8 @@ public class ItemStackUtils {
     private static final class Data {
         /**
          * The current version of the server in the form of a major version.
-         * If the static initialization for this fails, you know something's wrong with the server software.
+         * If the static initialization for this fails, you know something's wrong with
+         * the server software.
          *
          * @since 1.0.0
          */
@@ -45,8 +46,10 @@ public class ItemStackUtils {
             String version = Bukkit.getVersion();
             Matcher matcher = Pattern.compile("MC: \\d\\.(\\d+)").matcher(version);
 
-            if (matcher.find()) VERSION = Integer.parseInt(matcher.group(1));
-            else throw new IllegalArgumentException("Failed to parse server version from: " + version);
+            if (matcher.find())
+                VERSION = Integer.parseInt(matcher.group(1));
+            else
+                throw new IllegalArgumentException("Failed to parse server version from: " + version);
         }
 
         /**
@@ -56,11 +59,11 @@ public class ItemStackUtils {
          */
         private static final boolean ISFLAT = supports(13);
 
-        public static boolean supports(int version)
-        {
+        public static boolean supports(int version) {
             return Data.VERSION >= version;
         }
     }
+
     /**
      * Creates a new ItemStack from the provided arguments.
      *
@@ -72,7 +75,8 @@ public class ItemStackUtils {
      */
     public static ItemStack makeItem(ObsidianMaterial material, int amount, String name, List<String> lore) {
         ItemStack itemStack = material.toItem();
-        if (itemStack == null) return null;
+        if (itemStack == null)
+            return null;
         itemStack.setAmount(amount);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
@@ -88,21 +92,36 @@ public class ItemStackUtils {
      * Creates a new ItemStack from the provided arguments.
      *
      * @param item         An existing item we should clone
-     * @param placeholders A list of Placeholders we should claim to the display name and lore
+     * @param placeholders A list of Placeholders we should claim to the display
+     *                     name and lore
      * @return The new ItemStack
      */
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
-        ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
-        if (item.material instanceof com.moyskleytech.obsidian.material.implementations.HeadMaterial && item.headData != null) {
+        ItemStack itemStack = makeItem(item.material, item.amount,
+                StringUtils.processMultiplePlaceholders(item.displayName, placeholders),
+                StringUtils.processMultiplePlaceholders(item.lore, placeholders));
+        if (item.material.name().contains("HEAD") && item.headData != null) {
             itemStack = setHeadData(item.headData, itemStack);
-        } else if (item.material instanceof com.moyskleytech.obsidian.material.implementations.HeadMaterial && item.headOwner != null) {
+        } else if (item.material.name().contains("HEAD") && item.headOwner != null) {
             UUID uuid;
             if (item.headOwnerUUID == null) {
                 uuid = SkinUtils.getUUID(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
             } else {
                 uuid = item.headOwnerUUID;
             }
+            ItemMeta meta = itemStack.getItemMeta();
+            if (item.customModelData != null)
+                meta.setCustomModelData(item.customModelData);
+            SkullMeta smeta = (SkullMeta) meta;
+            smeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
+            itemStack.setItemMeta(smeta);
+
             itemStack = setHeadData(SkinUtils.getHeadData(uuid), itemStack);
+        } else {
+            ItemMeta meta = itemStack.getItemMeta();
+            if (item.customModelData != null)
+                meta.setCustomModelData(item.customModelData);
+            itemStack.setItemMeta(meta);
         }
 
         return itemStack;
@@ -160,12 +179,14 @@ public class ItemStackUtils {
      *
      * @param headData  The head data which should be applied
      * @param itemStack The ItemStack which should have the head data
-     * @return A new ItemStack which is similar to the provided one but has the head data
+     * @return A new ItemStack which is similar to the provided one but has the head
+     *         data
      */
     private static ItemStack setHeadData(String headData, ItemStack itemStack) {
-        if (IridiumCore.getInstance().isTesting()) return itemStack;
-        if (headData == null) return itemStack;
-
+        if (IridiumCore.getInstance().isTesting())
+            return itemStack;
+        if (headData == null)
+            return itemStack;
 
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompound skull = nbtItem.addCompound("SkullOwner");

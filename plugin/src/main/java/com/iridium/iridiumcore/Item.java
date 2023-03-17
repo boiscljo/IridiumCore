@@ -23,6 +23,7 @@ public class Item {
     public UUID headOwnerUUID;
     public List<String> lore;
     public Integer slot;
+    public Integer customModelData;
 
     /**
      * Creates a new item with the provided data.
