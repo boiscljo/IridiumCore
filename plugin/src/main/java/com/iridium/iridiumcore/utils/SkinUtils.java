@@ -26,10 +26,21 @@ public class SkinUtils {
 
     private static final String steveSkin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==";
 
+    private static boolean cached = false;
+
     public static UUID getUUID(String username) {
+        if (uuidCache.containsKey(username)) {
+            return uuidCache.get(username);
+        }
+        if (!cached) {
+            for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
+                uuidCache.put(offlinePlayer.getName(), offlinePlayer.getUniqueId());
+            }
+            cached=true;
+        }
         if (!isValidUsername(username)) {
             OfflinePlayer player = Bukkit.getOfflinePlayer(username);
-            return player.getUniqueId();
+            uuidCache.put(username, player.getUniqueId());
         }
         if (!uuidCache.containsKey(username)) {
             uuidCache.put(username, loadingUUID);
@@ -43,8 +54,7 @@ public class SkinUtils {
                             uuidCache.put(username,
                                     UUID.fromString(value.replaceFirst(
                                             "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-                                            "$1-$2-$3-$4-$5"
-                                    )));
+                                            "$1-$2-$3-$4-$5")));
                         }
                     }
                 } catch (UnknownHostException ignored) {
@@ -55,20 +65,24 @@ public class SkinUtils {
     }
 
     public static String getHeadData(UUID uuid) {
-        if (uuid.equals(loadingUUID) || isBedrockPlayer(uuid)) return steveSkin;
+        if (uuid.equals(loadingUUID) || isBedrockPlayer(uuid))
+            return steveSkin;
         if (!cache.containsKey(uuid)) {
             cache.put(uuid, steveSkin);
             CompletableFuture.runAsync(() -> {
                 try {
-                    String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
+                    String signature = getURLContent(
+                            "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
                     if (!signature.isEmpty()) {
                         JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
                         if (profileJsonObject.has("properties")) {
-                            String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
+                            String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject()
+                                    .get("value").getAsString();
                             String decoded = new String(Base64.getDecoder().decode(value));
 
                             JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
-                            String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+                            String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN")
+                                    .get("url").getAsString();
                             byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
                             String data = new String(Base64.getEncoder().encode(skinByte));
                             cache.put(uuid, data);
@@ -88,12 +102,14 @@ public class SkinUtils {
             URL url = new URL(urlStr);
             in = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
             String str;
-            while ((str = in.readLine()) != null) stringBuilder.append(str);
+            while ((str = in.readLine()) != null)
+                stringBuilder.append(str);
         } catch (Exception exception) {
             exception.printStackTrace();
         } finally {
             try {
-                if (in != null) in.close();
+                if (in != null)
+                    in.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -104,7 +120,7 @@ public class SkinUtils {
     private static boolean isValidUsername(String input) {
         return input != null && input.matches("\\w{3,16}");
     }
-    
+
     private static boolean isBedrockPlayer(UUID uuid) {
         return uuid.toString().contains("00000000-0000-0000"); // Bedrock Player (GeyserMC)
     }
