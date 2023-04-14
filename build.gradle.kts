@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.6.8-OM"
+version = "1.6.9-OM"
 description = "IridiumCore"
 
 allprojects {
@@ -27,8 +27,8 @@ allprojects {
     dependencies {
         // Dependencies that we want to shade in
         implementation("org.jetbrains:annotations:23.0.0")
-        implementation("com.moyskleytech:ObsidianMaterialAPI:1.0.3-SNAPSHOT")
-        implementation("com.github.cryptomorin:XSeries:9.1.0")
+        implementation("com.moyskleytech:ObsidianMaterialAPI:1.0.4")
+        implementation("com.github.cryptomorin:XSeries:9.3.1")
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.projectlombok:lombok:1.18.22")
 
@@ -43,9 +43,8 @@ dependencies {
 }
 
 tasks {
-    jar {
+    assemble {
         dependsOn("shadowJar")
-        enabled = false
     }
 
     shadowJar {
@@ -56,7 +55,6 @@ tasks {
         relocate("io.papermc.lib", "com.iridium.iridiumcore.dependencies.paperlib")
         relocate("com.fasterxml.jackson", "com.iridium.iridiumcore.dependencies.fasterxml")
         relocate("com.cryptomorin.xseries", "com.moyskleytech.obsidian.material.dependencies.xseries")
-
     }
 
     compileJava {
