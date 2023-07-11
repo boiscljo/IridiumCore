@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.6.9-OM"
+version = "1.6.11-OM"
 description = "IridiumCore"
 
 allprojects {
@@ -31,6 +31,7 @@ allprojects {
         implementation("com.github.cryptomorin:XSeries:9.3.1")
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.projectlombok:lombok:1.18.22")
+        compileOnly("de.tr7zw:item-nbt-api-plugin:2.11.3")
 
         // Enable lombok annotation processing
         annotationProcessor("org.projectlombok:lombok:1.18.22")
@@ -49,7 +50,6 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("")
-        relocate("de.tr7zw.changeme.nbtapi", "com.iridium.iridiumcore.dependencies.nbtapi")
         relocate("com.iridium.iridiumcolorapi", "com.iridium.iridiumcore.dependencies.iridiumcolorapi")
         relocate("org.yaml.snakeyaml", "com.iridium.iridiumcore.dependencies.snakeyaml")
         relocate("io.papermc.lib", "com.iridium.iridiumcore.dependencies.paperlib")

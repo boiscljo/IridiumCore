@@ -188,6 +188,15 @@ public class ItemStackUtils {
         if (headData == null)
             return itemStack;
 
+        try {
+            return nbtApply(headData, itemStack);
+        } catch (Throwable t) {
+            return itemStack;
+        }
+    }
+
+    private static ItemStack nbtApply(String headData, ItemStack itemStack)
+    {
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompound skull = nbtItem.addCompound("SkullOwner");
         if (supports) {

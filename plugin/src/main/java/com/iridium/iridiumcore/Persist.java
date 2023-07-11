@@ -138,7 +138,7 @@ public class Persist {
             objectMapper.writeValue(file, instance);
         } catch (IOException e) {
             javaPlugin.getLogger().severe("Failed to save " + file.toString() + ": " + e.getMessage());
-            Bukkit.getPluginManager().disablePlugin(javaPlugin);
+            //Bukkit.getPluginManager().disablePlugin(javaPlugin);
         }
     }
 
@@ -155,7 +155,7 @@ public class Persist {
             return objectMapper.writeValueAsString(instance);
         } catch (IOException e) {
             javaPlugin.getLogger().severe("Failed to save " + instance.toString() + ": " + e.getMessage());
-            Bukkit.getPluginManager().disablePlugin(javaPlugin);
+            //Bukkit.getPluginManager().disablePlugin(javaPlugin);
         }
         return "";
     }
@@ -189,7 +189,7 @@ public class Persist {
                 return objectMapper.readValue(file, clazz);
             } catch (IOException e) {
                 javaPlugin.getLogger().severe("Failed to parse " + file + ": " + e.getMessage());
-                Bukkit.getPluginManager().disablePlugin(javaPlugin);
+                //Bukkit.getPluginManager().disablePlugin(javaPlugin);
             }
         }
         try {
@@ -214,7 +214,7 @@ public class Persist {
             return objectMapper.readValue(content, clazz);
         } catch (IOException e) {
             e.printStackTrace();
-            Bukkit.getPluginManager().disablePlugin(javaPlugin);
+            //Bukkit.getPluginManager().disablePlugin(javaPlugin);
         }
 
         return null;
