@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.6.11-OM"
+version = "1.6.12-OM"
 description = "IridiumCore"
 
 allprojects {
@@ -27,11 +27,10 @@ allprojects {
     dependencies {
         // Dependencies that we want to shade in
         implementation("org.jetbrains:annotations:23.0.0")
-        implementation("com.moyskleytech:ObsidianMaterialAPI:1.0.4")
+        implementation("com.moyskleytech:ObsidianMaterialAPI:1.0.5")
         implementation("com.github.cryptomorin:XSeries:9.3.1")
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.projectlombok:lombok:1.18.22")
-        compileOnly("de.tr7zw:item-nbt-api-plugin:2.11.3")
 
         // Enable lombok annotation processing
         annotationProcessor("org.projectlombok:lombok:1.18.22")
