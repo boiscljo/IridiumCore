@@ -34,7 +34,7 @@ public class Persist {
 
         objectMapper = new ObjectMapper(persistType.getFactory()).configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
         try{
-        ObsidianMaterialKeyDeserializer.registerKeyDeserializer(objectMapper);
+        ObsidianMaterialKeyDeserializer.registerKeyDeserialiaddzer(objectMapper);
         }catch(Throwable t)
         {
             t.printStackTrace();
