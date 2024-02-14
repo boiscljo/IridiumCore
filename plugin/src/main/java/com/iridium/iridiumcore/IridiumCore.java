@@ -3,6 +3,8 @@ package com.iridium.iridiumcore;
 import com.iridium.iridiumcore.gui.GUI;
 import com.iridium.iridiumcore.multiversion.MultiVersion;
 import com.iridium.iridiumcore.nms.NMS;
+import com.iridium.iridiumcore.utils.Scheduler;
+
 import io.papermc.lib.PaperLib;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +31,7 @@ public class IridiumCore extends JavaPlugin {
     private NMS nms;
     private MultiVersion multiVersion;
     private boolean isTesting = false;
-    private BukkitTask saveTask;
+    private Scheduler.Task saveTask;
 
     private static IridiumCore instance;
 
@@ -76,18 +78,26 @@ public class IridiumCore extends JavaPlugin {
         // Register plugin listeners
         registerListeners();
 
-        if (isTesting) return;
+        if (isTesting)
+            return;
 
         // Save data regularly
-        saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveData, 0, 20 * 60 * 5);
+        saveTask = Scheduler.getInstance().runTaskTimerAsync((task) -> {
+            this.saveData();
+        }, 20 * 60, 20 * 60 * 5);
 
         // Automatically update all inventories
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getServer().getOnlinePlayers().forEach(player -> {
-            InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
-            if (inventoryHolder instanceof GUI) {
-                ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());
-            }
-        }), 0, 1);
+        Scheduler.getInstance().runTaskTimer((task) -> {
+            Bukkit.getServer().getOnlinePlayers().forEach(player -> {
+                Scheduler.getInstance().runEntityTask(player, 0, () -> {
+                    InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
+                    if (inventoryHolder instanceof GUI) {
+                        ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());
+                    }
+                });
+            });
+        }, 0, 1);
+
     }
 
     /**
@@ -95,8 +105,10 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        if (isTesting) return;
-        if (saveTask != null) saveTask.cancel();
+        if (isTesting)
+            return;
+        if (saveTask != null)
+            saveTask.cancel();
         saveData();
         Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);
         getLogger().info("-------------------------------");
@@ -119,7 +131,8 @@ public class IridiumCore extends JavaPlugin {
     }
 
     /**
-     * Automatically gets the correct {@link MultiVersion} and {@link NMS} support from the Minecraft server version.
+     * Automatically gets the correct {@link MultiVersion} and {@link NMS} support
+     * from the Minecraft server version.
      */
     private void setupMultiVersion() {
         try {
@@ -141,7 +154,6 @@ public class IridiumCore extends JavaPlugin {
      */
     public void loadConfigs() {
     }
-
 
     /**
      * Saves changes to the configuration files.

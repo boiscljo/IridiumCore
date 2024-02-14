@@ -115,7 +115,11 @@ public class ItemStackUtils {
             if (item.customModelData != null)
                 meta.setCustomModelData(item.customModelData);
             SkullMeta smeta = (SkullMeta) meta;
-            smeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
+            try {
+                smeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
+            } catch (Throwable t) {
+
+            }
             itemStack.setItemMeta(smeta);
 
             itemStack = setHeadData(SkinUtils.getHeadData(uuid), itemStack);
@@ -197,8 +201,7 @@ public class ItemStackUtils {
         }
     }
 
-    private static ItemStack nbtApply(String headData, ItemStack itemStack)
-    {
+    private static ItemStack nbtApply(String headData, ItemStack itemStack) {
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompound skull = nbtItem.addCompound("SkullOwner");
         if (supports) {

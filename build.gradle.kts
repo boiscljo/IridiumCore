@@ -1,17 +1,17 @@
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
-
+defaultTasks("shadowJar","publishToMavenLocal")
 group = "com.iridium"
-version = "1.6.12-OM"
+version = "1.6.12-OM-folia"
 description = "IridiumCore"
 
 allprojects {
     apply(plugin = "java")
 
-    java.sourceCompatibility = JavaVersion.VERSION_1_8
+    java.sourceCompatibility = JavaVersion.VERSION_17
 
     repositories {
         mavenLocal()
@@ -22,6 +22,7 @@ allprojects {
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
 
     dependencies {
@@ -63,6 +64,9 @@ tasks {
 
 publishing {
     publications.create<MavenPublication>("maven") {
-        from(components["java"])
+        setGroupId("com.iridium")
+        setArtifactId("IridiumCore")
+        setVersion(version)
+        artifact(tasks["shadowJar"])
     }
 }
